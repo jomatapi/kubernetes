@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gunicorn
+  name: gunicorn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gunicorn
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gunicorn
+    spec:
+      containers:
+        - image: jomatapi/gunicorn:1.0
+          name: gunicorn
+          ports:
+            - containerPort: 9000
+          resources: {}
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 9000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+      restartPolicy: Always
+status: {}
